@@ -92,4 +92,51 @@ app.use((err, req, res, next) => {
 
 
 
+// Mongoose লাইব্রেরি ইনপোর্ট করলাম (MongoDB এর সাথে কাজ করার জন্য)
+const mongoose = require('mongoose');
+
+// MongoDB ডাটাবেসের সাথে কানেকশন করলাম
+mongoose.connect('mongodb://localhost:27017/mydb', {
+  useNewUrlParser: true,        // নতুন URL পার্সার ব্যবহার করবো
+  useUnifiedTopology: true      // ইউনিফাইড টপোলজি চালু করবো (নতুন সিস্টেম)
+})
+.then(() => console.log('MongoDB connected'))  // কানেকশন সফল হলে মেসেজ দিবে
+.catch(err => console.error('Connection error:', err)); // কানেকশনে সমস্যা হলে এরর দেখাবে
+
+// একটি ইউজার মডেল বানালাম (Schema ছাড়াও করা হয়েছে সরলতার জন্য)
+const User = mongoose.model('User', {
+  name: String,   // ইউজারের নাম স্টোর হবে
+  email: String   // ইউজারের ইমেইল স্টোর হবে
+});
+
+// POST রাউট তৈরি করলাম: নতুন ইউজার বানানোর জন্য
+app.post('/users', async (req, res) => {
+  try {
+    // ইউজার অবজেক্ট তৈরি করলাম রিকুয়েস্ট থেকে পাওয়া ডেটা দিয়ে
+    const user = new User(req.body);
+
+    // ডাটাবেসে সেইভ করলাম
+    await user.save();
+
+    // ২০১ মানে: Created. সেইভ সফল হলে ইউজারকে রেসপন্স হিসেবে পাঠালাম
+    res.status(201).send(user);
+  } catch (err) {
+    // কোনো এরর হলে ৪০০ (Bad Request) দিয়ে এরর পাঠালাম
+    res.status(400).send(err);
+  }
+});
+///////////////////////////////
+
+
+
+
+
+ 
+
+
+
+
+
+
+
 
