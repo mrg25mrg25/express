@@ -1,3 +1,4 @@
+jwt authentication
 // JWT টোকেন বানানোর লাইব্রেরি ইনপোর্ট করলাম
 const jwt = require('jsonwebtoken');
 
@@ -32,12 +33,13 @@ app.use((err, req, res, next) => {
     res.status(401).send('Invalid token');
   }
 });
+//…..............……
 
 
 
 
 
-
+// express-rate-limit
 
 // JWT টোকেন বানানোর লাইব্রেরি ইনপোর্ট করলাম
 const jwt = require('jsonwebtoken');
@@ -83,3 +85,11 @@ app.use((err, req, res, next) => {
     res.status(401).send('Invalid token');
   }
 });
+//...................
+
+
+
+
+
+
+
