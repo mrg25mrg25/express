@@ -220,6 +220,41 @@ app.post('/users',
 
 
 
+// file download 
+
+// fs ও path মডিউল ইমপোর্ট করা হয়েছে ফাইল ম্যানেজমেন্টের জন্য
+const fs = require('fs');
+const path = require('path');
+
+// Express এর GET route তৈরি করা হয়েছে '/download' এ
+app.get('/download', (req, res) => {
+
+  // সার্ভারের ভিতরে কোন ফাইল ডাউনলোড করাতে চাই তা path দিয়ে সেট করা হয়েছে
+  const filePath = path.join(__dirname, 'files/report.pdf');
+
+  // প্রথমে চেক করছি ফাইলটা সত্যি আছে কিনা
+  if (fs.existsSync(filePath)) {
+
+    // ফাইলটা আছে, তাই সেটাকে ডাউনলোড করানো হচ্ছে
+    // দ্বিতীয় প্যারামিটার দিয়ে ফাইলের নাম কাস্টমাইজ করা যাচ্ছে
+    res.download(filePath, 'custom-filename.pdf', (err) => {
+
+      // যদি ডাউনলোডে কোনো error আসে, সেটা ধরে নিচ্ছে এখানে
+      if (err) {
+        console.error('Download error:', err);
+        res.status(500).send('Download failed');  // error message পাঠানো হচ্ছে
+      }
+    });
+
+  } else {
+    // যদি ফাইল না থাকে, তখন 404 status দিয়ে "file not found" পাঠানো হচ্ছে
+    res.status(404).send('File not found');
+  }
+});
+/////////////////
+
+
+
 
 
 
