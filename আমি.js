@@ -190,6 +190,40 @@ app.listen(3000, () => {
 
 
 
+// express-validator লাইব্রেরি থেকে body ও validationResult ইমপোর্ট করা হয়েছে
+const { body, validationResult } = require('express-validator');
+
+// POST /users রাউট ডিফাইন করা হয়েছে
+app.post('/users', 
+  [
+    // email ফিল্ডটা ভ্যালিড ইমেইল কিনা চেক করে, তারপর normalize করে (lowercase + trim)
+    body('email').isEmail().normalizeEmail(),
+    
+    // password ফিল্ড কমপক্ষে ৬ অক্ষরের কিনা চেক করা হয়
+    body('password').isLength({ min: 6 })
+  ],
+  (req, res) => {
+    // validation result চেক করা হচ্ছে
+    const errors = validationResult(req);
+    
+    // যদি কোনো এরর থাকে, তাহলে 400 status দিয়ে error গুলা রিটার্ন করা হচ্ছে
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
+    // যদি ডাটা ভ্যালিড হয়, তাহলে এই জায়গায় ইউজার প্রসেস (create) করা হবে
+    res.send('User created successfully');
+  }
+);
+///////???/////////
+
+
+
+
+
+
+
+
 
 
 
