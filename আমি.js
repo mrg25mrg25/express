@@ -133,7 +133,35 @@ app.post('/users', async (req, res) => {
 
  
 
+// supertest লাইব্রেরি দিয়ে HTTP রিকোয়েস্ট পাঠানোর জন্য request ফাংশন আনা হয়েছে
+const request = require('supertest');
+// অ্যাপের মেইন ফাইল (যেখানে express app বানানো হয়) ইমপোর্ট করা হয়েছে
+const app = require('../app');
 
+// describe ব্লকের ভিতরে 'GET /api/users' রুট এর টেস্ট শুরু
+describe('GET /api/users', () => {
+
+  // এই টেস্টটা চেক করে সব ইউজার ফিরায় কিনা
+  it('should return all users', async () => {
+    const res = await request(app)         // app এর উপর রিকোয়েস্ট পাঠানো
+      .get('/api/users')                   // GET রিকোয়েস্ট
+      .expect(200);                        // HTTP status 200 আশা করা হয়
+
+    expect(Array.isArray(res.body)).toBeTruthy(); // রেসপন্স বডি একটা array কিনা চেক করা হয়
+  });
+
+  // এই টেস্টটা চেক করে নতুন ইউজার তৈরি হয় কিনা
+  it('should create a new user', async () => {
+    const res = await request(app)             // app এর উপর রিকোয়েস্ট পাঠানো
+      .post('/api/users')                      // POST রিকোয়েস্ট
+      .send({ name: 'John', email: 'john@example.com' }) // ইউজার ডেটা পাঠানো
+      .expect(201);                            // HTTP status 201 আশা করা হয় (Created)
+
+    expect(res.body.name).toBe('John');        // রেসপন্স বডিতে name ঠিক আছে কিনা চেক করা হয়
+  });
+
+});
+////////////////////
 
 
 
