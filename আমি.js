@@ -258,7 +258,40 @@ app.get('/download', (req, res) => {
 
 
 
+// Express ও WebSocket মডিউল ইমপোর্ট করা হচ্ছে
+const express = require('express');
+const WebSocket = require('ws');
 
+// Express অ্যাপ্লিকেশন তৈরি
+const app = express();
+// Express সার্ভার 3000 পোর্টে চলছে
+const server = app.listen(3000);
+
+// WebSocket সার্ভার তৈরি, express সার্ভারের সাথে কানেক্ট করা হচ্ছে
+const wss = new WebSocket.Server({ server });
+
+// WebSocket কানেকশন হ্যান্ডেল করা
+wss.on('connection', (ws) => {
+  console.log('New client connected');  // নতুন ক্লায়েন্ট কানেক্ট হলে মেসেজ দেখাবে
+  
+  // ক্লায়েন্ট থেকে মেসেজ আসলে সেটি হ্যান্ডেল করা
+  ws.on('message', (message) => {
+    console.log(`Received: ${message}`);  // ক্লায়েন্টের পাঠানো মেসেজ কনসোলে দেখাবে
+    
+    // সমস্ত কানেক্টেড ক্লায়েন্টে মেসেজ ব্রডকাস্ট করা
+    wss.clients.forEach(client => {
+      if(client.readyState === WebSocket.OPEN) {  // চেক করা হচ্ছে ক্লায়েন্ট কানেক্টেড কি না
+        client.send(`Server: ${message}`);  // সার্ভারের সাইড থেকে মেসেজ পাঠানো হচ্ছে
+      }
+    });
+  });
+
+  // ক্লায়েন্ট ডিসকানেক্ট হলে কনসোলে মেসেজ দেখাবে
+  ws.on('close', () => {
+    console.log('Client disconnected');
+  });
+});
+///////////////////////////
 
 
 
