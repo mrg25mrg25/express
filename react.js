@@ -1,30 +1,4 @@
-1props
 
-// React ইমপোর্ট করছি
-import React from 'react';
-
-// একটি কম্পোনেন্ট যেটা props গ্রহণ করে
-function Greeting(props) {
-  return (
-    <div>
-      {/* props.name ব্যবহার করে ডেটা দেখানো */}
-      <h2>হ্যালো, {props.name}!</h2>
-    </div>
-  );
-}
-
-// মূল কম্পোনেন্ট যেখানে Greeting কে props সহ কল করছি
-function App() {
-  return (
-    <div>
-      {/* Greeting কম্পোনেন্টে name props পাঠাচ্ছি */}
-      <Greeting name="রাজনেশ" />
-      <Greeting name="অর্জুন" />
-    </div>
-  );
-}
-
-export default App;
 ................................  
 2 props
 
